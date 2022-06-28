@@ -31,6 +31,14 @@ def query():
     records = c.fetchall()
     print(records)
 
+    #loop dei risultati 
+    print_records = ''
+    for record in records:
+        print_records += str(record) + "\n"
+
+    query_label = Label(root, text=print_records)
+    query_label.grid(row=8, column=0, columnspan=2)
+
     #commit 
     conn.commit() 
 
