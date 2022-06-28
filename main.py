@@ -1,5 +1,8 @@
 from tkinter import *
 from PIL import ImageTk,Image
+from tkinter.messagebox import askyesno
+from glob import glob
+import re
 import sqlite3
 
 root = Tk()
@@ -28,6 +31,55 @@ c.execute("""CREATE TABLE indirizzi (
 
 ##### WIDGET Funzioni #######
 
+#accedo a finestra Views
+
+def showInfo():
+    newWindow = Toplevel(root)
+
+#check input fields 
+def check_empty():
+    if nome.entry(''):
+       return True
+    elif cognome.entry():
+        return True
+    elif indirizzo.entry():
+        return True
+    elif citta.entry():
+        return True
+    elif provincia.entry():
+        return True
+    elif zipcode.entry():
+        return True
+    else:
+        print('campo richiesto')
+
+
+
+#per gestire validazione email 
+def show_message(error='', color='black'):
+    label_error['text'] = error
+    email_entry['foreground'] = color
+
+def validate(value):
+
+    pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+
+    if re.fullmatch(pattern, value) is None:
+        return False
+
+    show_message()
+    return True
+
+# click event handler
+def conferma():
+    domanda = askyesno(title='conferma stato chiusura',
+                    message='Sei sicuro di voler chiudere il programma ?')
+    if domanda:
+        root.destroy()
+
+def chiudi():
+    pass
+
 def submit():
 
     #creazione a datavbase
@@ -35,6 +87,8 @@ def submit():
 
     #creazione del cursore
     c = conn.cursor() 
+
+  
 
     #inserisci nella tabella
     c.execute("INSERT INTO indirizzi VALUES (:nome, :cognome, :indirizzo, :citta, :provincia, :zipcode)",
@@ -116,6 +170,12 @@ zipcode_label.grid(row=5, column=0)
 
 submit_btn = Button(root, text="Aggiungi", command=submit)
 submit_btn.grid(row=6, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
+
+close_btn = Button(root, text="Chiudi", command=conferma)
+close_btn.grid(row=7, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
+
+btn_info = Button(root, text="Info",command=showInfo)
+btn_info.grid(row=8, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
 
 
 #commit 
