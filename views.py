@@ -8,6 +8,7 @@ import sqlite3
 root = Tk()
 root.title('Sql Tkinter App')
 root.geometry("400x400")
+root.iconbitmap('icon.ico')
 
 #Database
 
@@ -18,6 +19,10 @@ conn = sqlite3.connect('indirizzi.db')
 c = conn.cursor() 
 
 ##### FUNCTIONS ##################
+
+def viewMain():
+    root.destroy()
+    import main
 
 def query():
     #creazione a datavbase
@@ -34,7 +39,7 @@ def query():
     #loop dei risultati 
     print_records = ''
     for record in records:
-        print_records += str(record) + "\n"
+        print_records += str(record[0]) + ' ' + str(record[1]) + "\n"
 
     query_label = Label(root, text=print_records)
     query_label.grid(row=8, column=0, columnspan=2)
@@ -51,6 +56,9 @@ def query():
 
 query_btn = Button(root, text="Mostra Records", command=query)
 query_btn.grid(row=6, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
+
+main_btn = Button(root, text="Torna alla Main", command=viewMain)
+main_btn.grid(row=7, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
 
 
 

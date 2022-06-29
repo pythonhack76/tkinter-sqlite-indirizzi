@@ -8,6 +8,7 @@ import sqlite3
 root = Tk()
 root.title('Sql Tkinter App')
 root.geometry("400x400")
+root.iconbitmap('icon.ico')
 
 #Database
 
@@ -31,10 +32,17 @@ c.execute("""CREATE TABLE indirizzi (
 
 ##### WIDGET Funzioni #######
 
-#accedo a finestra Views
-
+#mostro Info
 def showInfo():
     newWindow = Toplevel(root)
+    newWindow.title("Finestra")
+    newWindow.geometry("400x299")
+    newWindow.config()
+
+#accedo a finestra Views
+def viewResult():
+    root.destroy()
+    import views
 
 #check input fields 
 def check_empty():
@@ -171,11 +179,14 @@ zipcode_label.grid(row=5, column=0)
 submit_btn = Button(root, text="Aggiungi", command=submit)
 submit_btn.grid(row=6, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
 
+views_btn = Button(root, text="Risultati", command=viewResult)
+views_btn.grid(row=7, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
+
 close_btn = Button(root, text="Chiudi", command=conferma)
-close_btn.grid(row=7, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
+close_btn.grid(row=8, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
 
 btn_info = Button(root, text="Info",command=showInfo)
-btn_info.grid(row=8, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
+btn_info.grid(row=9, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
 
 
 #commit 
