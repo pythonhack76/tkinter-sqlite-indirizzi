@@ -7,7 +7,7 @@ import re
 import sqlite3
 
 root = Tk()
-root.title('Sql Tkinter App')
+root.title('SALES App')
 root.geometry("400x400")
 root.iconbitmap('icon.ico')
 root.config(bg="#6387AB")
@@ -15,30 +15,26 @@ root.config(bg="#6387AB")
 #Database
 
 #creazione a datavbase
-conn = sqlite3.connect('indirizzi.db')
+conn = sqlite3.connect('sales.db')
 
 #creazione del cursore
 c = conn.cursor() 
 
 #creeazione della tabella
 '''
-c.execute("""CREATE TABLE indirizzi (
-    nome text,
-    cognome text,
-    indirizzo text,
-    citta text,
-    provincia text,
-    zipcode integer
+c.execute("""CREATE TABLE acquisti (
+    fornitore text,
+    fattura text,
+    data text,
+    importo integer,
+    pagamento text,
+    pagato text
     )""") 
 '''
 
 ##### values OF program #####
 
-copyright = StringVar(value="copyright")
-privacy_si = BooleanVar(True)
-privacy_no = BooleanVar(False)
-
-
+var = StringVar(value="testo della label")
 
 ##### WIDGET Funzioni #######
 
@@ -47,13 +43,13 @@ privacy_no = BooleanVar(False)
 def cancella():
 
     #creazione a datavbase
-    conn = sqlite3.connect('indirizzi.db')
+    conn = sqlite3.connect('sales.db')
 
     #creazione del cursore
     c = conn.cursor() 
 
     #cancella record
-    c.execute("DELETE from indirizzi WHERE oid=")
+    c.execute("DELETE from acquisti WHERE oid=")
     #commit 
     conn.commit() 
 
@@ -63,18 +59,18 @@ def cancella():
 
 #validazione campi input
 def validation():
-    nome = nome.get()
+    fornitore = fornitore.get()
     msg = ''
 
     if len(nome) == 0:
-        msg = ('il nome non può essere vuoto!')
+        msg = ('il fornitore non può essere vuoto!')
     else:
         try:
-            if any(ch.isdigit() for ch in nome):
+            if any(ch.isdigit() for ch in fornitore):
                 msg = ('il nome non può contenere numeri')
-            elif len(nome) <= 2:
+            elif len(fornitore) <= 2:
                 msg = ('il nome non può essere di soli due caratteri')
-            elif len(nome) > 100:
+            elif len(fornitore) > 100:
                 msg = ('il nome non può avere piu di 99 caratteri')
             else:
                 msg = ('successo')
@@ -95,17 +91,17 @@ def viewResult():
 
 #check input fields 
 def check_empty():
-    if nome.entry(''):
+    if fornitore.entry(''):
        return True
-    elif cognome.entry():
+    elif fattura.entry():
         return True
-    elif indirizzo.entry():
+    elif data.entry():
         return True
-    elif citta.entry():
+    elif importo.entry():
         return True
-    elif provincia.entry():
+    elif pagamento.entry():
         return True
-    elif zipcode.entry():
+    elif pagato.entry():
         return True
     else:
         print('campo richiesto')
@@ -140,7 +136,7 @@ def chiudi():
 def submit():
 
     #creazione a datavbase
-    conn = sqlite3.connect('indirizzi.db')
+    conn = sqlite3.connect('sales.db')
 
     #creazione del cursore
     c = conn.cursor() 
@@ -148,14 +144,14 @@ def submit():
   
 
     #inserisci nella tabella
-    c.execute("INSERT INTO indirizzi VALUES (:nome, :cognome, :indirizzo, :citta, :provincia, :zipcode)",
+    c.execute("INSERT INTO acquisti VALUES (:fornitore, :fattura, :data, :importo, :pagamento, :pagato)",
             {
-                'nome': nome.get(),
-                'cognome': cognome.get(),
-                'indirizzo': indirizzo.get(),
-                'citta': citta.get(),
-                'provincia': provincia.get(),
-                'zipcode': zipcode.get(),
+                'fornitore': fornitore.get(),
+                'fattura': fattura.get(),
+                'data': data.get(),
+                'importo': importo.get(),
+                'pagamento': pagamento.get(),
+                'pagato': pagato.get(),
 
             }   
 
@@ -172,56 +168,56 @@ def submit():
 
 
     #pulisci il text boxes
-    nome.delete(0, END)
-    cognome.delete(0, END)
-    indirizzo.delete(0, END)
-    citta.delete(0, END)
-    provincia.delete(0, END)
-    zipcode.delete(0, END)
+    fornitore.delete(0, END)
+    fattura.delete(0, END)
+    data.delete(0, END)
+    importo.delete(0, END)
+    pagamento.delete(0, END)
+    pagato.delete(0, END)
     
 
 
 
 
 ##### WIDGET text boxes #######
-nome = Entry(root, width=30)
-nome.grid(row=0, column=1, padx=20, pady=(10, 0))
+fornitore = Entry(root, width=30)
+fornitore.grid(row=0, column=1, padx=20, pady=(10, 0))
 
-cognome = Entry(root, width=30)
-cognome.grid(row=1, column=1, padx=20)
+fattura = Entry(root, width=30)
+fattura.grid(row=1, column=1, padx=20)
 
-indirizzo = Entry(root, width=30)
-indirizzo.grid(row=2, column=1, padx=20)
+data = Entry(root, width=30)
+data.grid(row=2, column=1, padx=20)
 
-citta = Entry(root, width=30)
-citta.grid(row=3, column=1, padx=20)
+importo = Entry(root, width=30)
+importo.grid(row=3, column=1, padx=20)
 
-provincia = Entry(root, width=30)
-provincia.grid(row=4, column=1, padx=20)
+pagamento = Entry(root, width=30)
+pagamento.grid(row=4, column=1, padx=20)
 
-zipcode = Entry(root, width=30)
-zipcode.grid(row=5, column=1, padx=20)
+pagato = Entry(root, width=30)
+pagato.grid(row=5, column=1, padx=20)
 
 ##### WIDGET label boxes #######
 
-nome_label = Label(root, text="Nome", bg="#6387AB")
-nome_label.grid(row=0, column=0, pady=(10, 0))
+fornitore_label = Label(root, text="Fornitore", bg="#6387AB")
+fornitore_label.grid(row=0, column=0, pady=(10, 0))
 
-cognome_label = Label(root, text="Cognome", bg="#6387AB")
-cognome_label.grid(row=1, column=0)
+fattura_label = Label(root, text="Fattura", bg="#6387AB")
+fattura_label.grid(row=1, column=0)
 
-indirizzo_label = Label(root, text="indirizzo", bg="#6387AB")
-indirizzo_label.grid(row=2, column=0)
+data_label = Label(root, text="Data", bg="#6387AB")
+data_label.grid(row=2, column=0)
 
-citta_label = Label(root, text="citta", bg="#6387AB")
-citta_label.grid(row=3, column=0)
+importo_label = Label(root, text="importo", bg="#6387AB")
+importo_label.grid(row=3, column=0)
 
 #provincia_label = Label(root, text="provincia", bg="#6387AB")
-provincia_label = Label(root, text="provincia", bg="#6387AB")
-provincia_label.grid(row=4, column=0)
+pagamento_label = Label(root, text="pagamento", bg="#6387AB")
+pagamento_label.grid(row=4, column=0)
 
-zipcode_label = Label(root, text="zipcode", bg="#6387AB")
-zipcode_label.grid(row=5, column=0)
+pagato_label = Label(root, text="pagato", bg="#6387AB")
+pagato_label.grid(row=5, column=0)
 
 
 ##### WIDGET bottoni #######
@@ -243,7 +239,7 @@ btn_info = Button(root, text="Info",command=showInfo)
 btn_info.grid(row=9, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
 
 #DELETE button
-btn_delete = Button(root, text="Cnacella",command=cancella)
+btn_delete = Button(root, text="Cacella",command=cancella)
 btn_delete.grid(row=10, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
 
 
