@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 from PIL import ImageTk,Image
 from tkinter.messagebox import askyesno
 from glob import glob
@@ -9,6 +10,7 @@ root = Tk()
 root.title('Sql Tkinter App')
 root.geometry("400x400")
 root.iconbitmap('icon.ico')
+root.config(bg="#6387AB")
 
 #Database
 
@@ -31,6 +33,45 @@ c.execute("""CREATE TABLE indirizzi (
 '''
 
 ##### WIDGET Funzioni #######
+
+#funzione delete item
+
+def cancella():
+
+    #creazione a datavbase
+    conn = sqlite3.connect('indirizzi.db')
+
+    #creazione del cursore
+    c = conn.cursor() 
+
+    #cancella record
+    c.execute("DELETE from indirizzi WHERE oid=")
+    #commit 
+    conn.commit() 
+
+    #chiudi connessione
+    conn.close() 
+
+
+#validazione campi input
+def validation():
+    nome = nome.get()
+    msg = ''
+
+    if len(nome) == 0:
+        msg = ('il nome non può essere vuoto!')
+    else:
+        try:
+            if any(ch.isdigit() for ch in nome):
+                msg = ('il nome non può contenere numeri')
+            elif len(nome) <= 2:
+                msg = ('il nome non può essere di soli due caratteri')
+            elif len(nome) > 100:
+                msg = ('il nome non può avere piu di 99 caratteri')
+            else:
+                msg = ('successo')
+        except Exception as ep:
+            messagebox.showerror('message', ep)
 
 #mostro Info
 def showInfo():
@@ -136,7 +177,7 @@ def submit():
 
 ##### WIDGET text boxes #######
 nome = Entry(root, width=30)
-nome.grid(row=0, column=1, padx=20)
+nome.grid(row=0, column=1, padx=20, pady=(10, 0))
 
 cognome = Entry(root, width=30)
 cognome.grid(row=1, column=1, padx=20)
@@ -156,7 +197,7 @@ zipcode.grid(row=5, column=1, padx=20)
 ##### WIDGET label boxes #######
 
 nome_label = Label(root, text="Nome")
-nome_label.grid(row=0, column=0)
+nome_label.grid(row=0, column=0, pady=(10, 0))
 
 cognome_label = Label(root, text="Cognome")
 cognome_label.grid(row=1, column=0)
@@ -187,6 +228,10 @@ close_btn.grid(row=8, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
 
 btn_info = Button(root, text="Info",command=showInfo)
 btn_info.grid(row=9, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
+
+#DELETE button
+btn_delete = Button(root, text="Cnacella",command=cancella)
+btn_delete.grid(row=10, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
 
 
 #commit 
